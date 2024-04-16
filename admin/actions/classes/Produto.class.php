@@ -11,10 +11,12 @@ class Contato
     public $nome;
     public $preco;
     public $estoque;
-    public $noe;
+    public $id_categoria;
+    public $id_usuario_resp;
+    public $descricao;
 
     // metodos
-    // public function Cadastrar(){}
+    public function Cadastrar(){}
 
 
 
