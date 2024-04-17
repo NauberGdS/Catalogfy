@@ -12,6 +12,6 @@ setcookie(session_name(),'',0,'/');
 
 session_regenerate_id(true);
 
-header('Location: painel.php');
+header('Location: index.php');
 
 ?>

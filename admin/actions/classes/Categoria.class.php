@@ -32,11 +32,16 @@ class Contato
     }
 
     public function Modificar(){
-        
+        $sql = "UPDATE categorias SET nome=? WHERE id=?";
+         $banco = Banco::conectar();
+         $comando = $banco->prepare($sql);
+         $comando->execute([$this->nome]);
+         banco::desconectar();
+         return $comando->rowCount();
     }
 
     public function Remover(){
-        $sql = "DELETE FROM categorias where id = ?";
+        $sql = "DELETE FROM categorias WHERE id = ?";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
         $comando->execute([$this->id]);
