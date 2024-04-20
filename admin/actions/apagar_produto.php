@@ -16,9 +16,9 @@ if (isset($_GET['id'])) {
     $prod->id = $_GET['id'];
     if ($prod->Apagar() == 1) {
         // Redirecionar de volta ao index
-        header('Location: ../painel.php?sucesso=1');
+        header('Location: ../painel.php');
     } else {
-        header('Location: ../painel.php?falha=1');
+        header('Location: ../painel.php');
     }
 
 } else {
