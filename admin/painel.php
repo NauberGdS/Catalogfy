@@ -1,13 +1,24 @@
 <?php
-// Painel de administração
+
+require_once('actions/classes/Categoria.class.php');
+require_once('actions/classes/Produto.class.php');
+
+
 session_start();
 // verificar se a sessão exste, caso nao, redirecionar ao login de volta
-if(!isset($_SESSION['usuario'])){
-  // Voltar ao login:
-  header('Location: index.php');
-  die();
+if (!isset($_SESSION['usuario'])) {
+    // Voltar ao login:
+    header('Location: index.php');
+    die();
 }
+// Puxar as categorias:
+$c = new Categoria();
 
+$lista_categorias = $c->Listar();
+
+// puxar produtos
+$p = new Produto();
+$lista_produtos = $p->ListarTudo();
 
 ?>
 <!DOCTYPE html>
@@ -49,27 +60,33 @@ if(!isset($_SESSION['usuario'])){
                     <th>Categoria</th>
                     <th>Estoque</th>
                     <th>Preço</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><img src="https://via.placeholder.com/150x150.png" alt="Produto 1"></td>
-                    <td>Produto 1</td>
-                    <td>Descrição do Produto 1</td>
-                    <td>Categoria 1</td>
-                    <td>10</td>
-                    <td>R$ 100,00</td>
+            <?php 
+               foreach($lista_produtos as $prod) { ?>
+               <tr>
+                    <td><?=$prod['id']?></td>
+                    <td><img src="fotos/<?=$prod['foto']; ?>" width="150px" alt="<?=$prod['nome']; ?>""></td>
+
+                    <td><?=$prod['nome']; ?></td>
+                    <td><?=$prod['descricao']; ?></td>
+                    <td><?=$prod['id_categoria']; ?></td>
+                    <td><?=$prod['estoque']; ?></td>
+                    <td><?=$prod['preco']; ?></td>
+                    <td><button type="button" class="btn btn-warning mx-1" data-toggle="modal" data-target="#modaleditar"
+                     data-nome="<?=$prod['nome'];?>" 
+                     data-descricao="<?=$prod['descricao'];?>" 
+                     data-estoque="<?=$prod['estoque'];?>" 
+                     data-preco="<?=$prod['preco'];?>" 
+                     data-id_categoria="<?=$prod['id_categoria'];?>"
+                     data-id="<?=$prod['id'];?>" >
+                    Editar Produto</button>
+                <a class="btn btn-danger mx-1 text-white" href="actions/apagar_produto.php?id=<?=$prod['id'];?>"> Excluir Produto</a></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="https://via.placeholder.com/150x150.png" alt="Produto 2"></td>
-                    <td>Produto 2</td>
-                    <td>Descrição do Produto 2</td>
-                    <td>Categoria 2</td>
-                    <td>5</td>
-                    <td>R$ 50,00</td>
-                </tr>
+
+                <?php } ?>
             </tbody>
         </table>
 
@@ -79,32 +96,35 @@ if(!isset($_SESSION['usuario'])){
     <div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="modalCadastroLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCadastroLabel">Cadastro de Produto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
+                <form action="actions/cadastrar_produto.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCadastroLabel">Cadastro de Produto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
                         <div class="form-group">
                             <label for="nomeProduto">Nome</label>
-                            <input type="text" class="form-control" id="nomeProduto" placeholder="Digite o nome do produto">
+                            <input type="text" class="form-control" id="nomeProduto" name="nome" placeholder="Digite o nome do produto">
                         </div>
                         <div class="form-group">
                             <label for="fotoProduto">Foto</label>
-                            <input type="file" class="form-control-file" id="fotoProduto">
+                            <input type="file" class="form-control-file" name="foto" id="fotoProduto">
                         </div>
                         <div class="form-group">
                             <label for="descricaoProduto">Descrição</label>
-                            <textarea class="form-control" id="descricaoProduto" rows="3"></textarea>
+                            <textarea class="form-control" id="descricaoProduto" name="descricao" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="categoriaProduto">Categoria</label>
-                            <select class="form-control" id="categoriaProduto">
-                                <option value="1">Categoria 1</option>
-                                <option value="2">Categoria 2</option>
-                                <option value="3">Categoria 3</option>
+                            <select class="form-control" name="id_categoria" id="categoriaProduto">
+
+                                <?php foreach ($lista_categorias as $cat) {  ?>
+                                    <option value="<?= $cat['id']; ?>"><?= $cat['nome']; ?></option>
+                                <?php  } ?>
+
                             </select> <br>
                             <div class="row">
                                 <div class="col d-flex justify-content-end">
@@ -114,7 +134,7 @@ if(!isset($_SESSION['usuario'])){
                         </div>
                         <div class="form-group">
                             <label for="estoqueProduto">Estoque</label>
-                            <input type="number" class="form-control" id="estoqueProduto" placeholder="Digite a quantidade em estoque">
+                            <input type="number" class="form-control"  id="estoqueProduto" name="estoque" placeholder="Digite a quantidade em estoque">
                         </div>
                         <div class="form-group">
                             <label for="precoProduto">Preço</label>
@@ -122,39 +142,101 @@ if(!isset($_SESSION['usuario'])){
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">R$</span>
                                 </div>
-                                <input type="number" class="form-control" id="precoProduto" placeholder="Digite o preço">
+                                <input type="number" class="form-control" id="precoProduto" name="preco" placeholder="Digite o preço">
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Salvar</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+     <!-- modal para adicionar categoria-->
     <div class="modal fade" id="modalAddCategoria" tabindex="-1" role="dialog" aria-labelledby="modalAddCategoriaLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalAddCategoriaLabel">Adicionar Categoria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
+                <form action="actions/cadastrar_categoria.php" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAddCategoriaLabel">Adicionar Categoria</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
                         <div class="form-group">
                             <label for="nomeCategoria">Nome da Categoria</label>
-                            <input type="text" class="form-control" id="nomeCategoria" placeholder="Digite o nome da categoria">
+                            <input type="text" class="form-control" id="nomeCategoria" placeholder="Digite o nome da categoria" name="categoria">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Adicionar</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <!-- Modal de Editar produto -->
+    <div class="modal fade" id="modaleditar" tabindex="-1" role="dialog" aria-labelledby="modaleditarlabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="actions/editar_produto.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCadastroLabel">Editor de Produto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+
+                    <div class="modal-body">
+                            <input type="hidden" class="form-control id" id="id" name="id"">
+                        <div class="form-group">
+                            <label for="nomeProduto">Nome</label>
+                            <input type="text" class="form-control nome" id="nomeProduto" name="nome"">
+                        </div>
+                        <div class="form-group">
+                            <label for="descricaoProduto">Descrição</label>
+                            <textarea class="form-control descricao" id="descricaoProduto" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoriaProduto">Categoria</label>
+                            <select class="form-control id_categoria" name="id_categoria" id="categoriaProduto">
+
+                                <?php foreach ($lista_categorias as $cat) {  ?>
+                                    <option value="<?= $cat['id']; ?>"><?= $cat['nome']; ?></option>
+                                <?php  } ?>
+
+                            </select> <br>
+                           
+                        </div>
+                        <div class="form-group">
+                            <label for="estoqueProduto">Estoque</label>
+                            <input type="number" class="form-control estoque"  id="estoqueProduto" name="estoque" placeholder="Digite a quantidade em estoque">
+                        </div>
+                        <div class="form-group">
+                            <label for="precoProduto">Preço</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">R$</span>
+                                </div>
+                                <input type="number" class="form-control preco" id="precoProduto" name="preco" placeholder="Digite o preço">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -162,6 +244,29 @@ if(!isset($_SESSION['usuario'])){
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $('#modaleditar').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+
+            var id = button.data('id')
+            var nome = button.data('nome')
+            var descricao = button.data('descricao')
+            var id_categoria = button.data('id_categoria')
+            var estoque = button.data('estoque') 
+            var preco = button.data('preco') 
+
+            var modal = $(this)
+
+            modal.find('.id').val(id)
+            modal.find('.nome').val(nome)
+            modal.find('.descricao').val(descricao)
+            modal.find('.id_categoria').val(id_categoria)
+            modal.find('.estoque').val(estoque)
+            modal.find('.preco').val(preco)
+        })
+    </script>
+
+
 </body>
 
 </html>

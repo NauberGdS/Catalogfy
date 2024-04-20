@@ -3,7 +3,7 @@
 require_once('Banco.class.php');
 
 
-class Contato
+class Categoria
 {
     // Atributos da classe
     public $id;
