@@ -15,9 +15,9 @@
         $c->nome = $_POST['categoria'];
         
         if($c->Cadastrar() == 1){
-            header('Location: ../painel.php');
+            header('Location: ../painel.php?sucesso=cadastrocategoria');
         }else{
-            echo "Falha ao cadastrar categoria.";
+            header('location: ../painel.php?falha=cadastrocategoria');
         }
     }else{
         echo "Essa página deve ser carregada por POST";

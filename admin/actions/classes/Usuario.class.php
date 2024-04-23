@@ -19,9 +19,14 @@ class Usuario
         // hash da senha:
         $hash = hash("sha256", $this->senha);
 
-        $comando->execute([$this->nome, $this->email, $hash]);
-        banco::desconectar();
-        return $comando->rowCount();
+        try{
+            $comando->execute([$this->nome, $this->email, $hash]);
+            banco::desconectar();
+            return $comando->rowCount();
+        } catch (PDOException $e) {
+            Banco::desconectar();
+            return 0;
+        }
     }
 
     public function Logar()
@@ -39,4 +44,3 @@ class Usuario
         return $arr_resultado;
     }
 }
-?>

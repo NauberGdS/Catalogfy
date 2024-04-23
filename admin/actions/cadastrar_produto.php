@@ -17,6 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $p->descricao = strip_tags($_POST['descricao']);
     $p->id_usuario_resp = $_SESSION['usuario']['id'];
 
+// verificar por dados inváidos:
+    if(strlen($p-> nome)<=3 || $p-> preco == "" || $p-> estoque == "") {
+        header("Location: ../painel.php?falha=cadastroproduto");
+        die();
+    }
+
+
     // Verificar se está chegando uma foto do formulário:
     if ($_FILES['foto']['size'] > 0) {
         $destino = "../fotos/";
@@ -31,9 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $p->foto = $novo_nome;
             if($p->CadastrarComFoto() == 1) {
                   // Redirecionar:
-                  header("Location: ../painel.php");
+                  header("Location: ../painel.php?sucesso=cadastroproduto");
             }else{
-                echo "Falha ao cadastrar o produto.";
+                header("Location: ../painel.php?falha=cadastroproduto");
             }
         } else {
             echo "Falha ao mover a imagem!";
@@ -44,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Cadastro sem ffoto
         if($p->CadastrarSemFoto() == 1){
             // Redirecionar:
-            header("Location: ../painel.php");
+            header("Location: ../painel.php?sucesso=cadastroproduto");
         }else{
-            echo "Falha ao cadastrar o produto.";
+            header("Location: ../painel.php?falha=cadastroproduto");
         }
     }
 }

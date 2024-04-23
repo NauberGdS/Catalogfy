@@ -23,10 +23,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 if($p->Editar() == 1) {
     
 //   redirecionar de olta ao index.php
-header('Location: ../painel.php?');
+header('Location: ../painel.php?sucesso=editarproduto');
 
 }else{
-    header('Location: ../painel.php?');
+    header('Location: ../painel.php?falha=editarproduto');
 } 
 
 }else{

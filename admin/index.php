@@ -112,6 +112,13 @@
             $("#titulo").text('Login');
         });
     </script>
+
+<?php 
+
+// É ALGO OPCIONAL UTILIZAR INCLUDE ONCE
+include_once('includes/alertas.include.php');
+?>
+
 </body>
 
 </html>

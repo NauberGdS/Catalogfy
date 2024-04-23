@@ -11,10 +11,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
 if($u->Cadastrar() == 1) {
 //   redirecionar de olta ao index.php
-header('Location: ../index.php?');
+header('Location: ../index.php?sucesso=cadastrousuario');
 
 }else{
-    echo "Falha ao cadastrar";
+    echo('Location: ../index.php?falha=cadastrousuario');
 } 
 
 }else{

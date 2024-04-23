@@ -64,27 +64,25 @@ $lista_produtos = $p->ListarTudo();
                 </tr>
             </thead>
             <tbody>
-            <?php 
-               foreach($lista_produtos as $prod) { ?>
-               <tr>
-                    <td><?=$prod['id']?></td>
-                    <td><img src="fotos/<?=$prod['foto']; ?>" width="150px" alt="<?=$prod['nome']; ?>""></td>
+                <?php
+                foreach ($lista_produtos as $prod) { ?>
+                    <tr>
+                        <td><?= $prod['id'] ?></td>
+                        <td><img src="fotos/<?= $prod['foto']; ?>" width="150px" alt="<?= $prod['nome']; ?>""></td>
 
-                    <td><?=$prod['nome']; ?></td>
-                    <td><?=$prod['descricao']; ?></td>
-                    <td><?=$prod['id_categoria']; ?></td>
-                    <td><?=$prod['estoque']; ?></td>
-                    <td><?=$prod['preco']; ?></td>
-                    <td><button type="button" class="btn btn-warning mx-1" data-toggle="modal" data-target="#modaleditar"
-                     data-nome="<?=$prod['nome'];?>" 
-                     data-descricao="<?=$prod['descricao'];?>" 
-                     data-estoque="<?=$prod['estoque'];?>" 
-                     data-preco="<?=$prod['preco'];?>" 
-                     data-id_categoria="<?=$prod['id_categoria'];?>"
-                     data-id="<?=$prod['id'];?>" >
-                    Editar Produto</button>
-                <a class="btn btn-danger mx-1 text-white" href="actions/apagar_produto.php?id=<?=$prod['id'];?>"> Excluir Produto</a></td>
-                </tr>
+                    <td><?= $prod['nome']; ?></td>
+                    <td><?= $prod['descricao']; ?></td>
+                    <td><?= $prod['id_categoria']; ?></td>
+                    <td><?= $prod['estoque']; ?></td>
+                    <td><?= $prod['preco']; ?></td>
+                    
+                    <td><button type=" button" class="btn btn-warning mx-1 mb-1" data-toggle="modal" data-target="#modaleditar" data-nome="<?= $prod['nome']; ?>" data-descricao="<?= $prod['descricao']; ?>" data-estoque="<?= $prod['estoque']; ?>" data-preco="<?= $prod['preco']; ?>" data-id_categoria="<?= $prod['id_categoria']; ?>" data-id="<?= $prod['id']; ?>">
+                            Editar Produto</button>
+                            <a class="btn btn-danger mx-1 text-white" href="#" onclick="excluir(<?=$prod['id'];?>)"> Excluir Produto</a>
+                        </td>
+
+
+                    </tr>
 
                 <?php } ?>
             </tbody>
@@ -134,7 +132,7 @@ $lista_produtos = $p->ListarTudo();
                         </div>
                         <div class="form-group">
                             <label for="estoqueProduto">Estoque</label>
-                            <input type="number" class="form-control"  id="estoqueProduto" name="estoque" placeholder="Digite a quantidade em estoque">
+                            <input type="number" class="form-control" id="estoqueProduto" name="estoque" placeholder="Digite a quantidade em estoque">
                         </div>
                         <div class="form-group">
                             <label for="precoProduto">Preço</label>
@@ -155,7 +153,7 @@ $lista_produtos = $p->ListarTudo();
         </div>
     </div>
 
-     <!-- modal para adicionar categoria-->
+    <!-- modal para adicionar categoria-->
     <div class="modal fade" id="modalAddCategoria" tabindex="-1" role="dialog" aria-labelledby="modalAddCategoriaLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -183,7 +181,7 @@ $lista_produtos = $p->ListarTudo();
     </div>
 
 
-    
+
     <!-- Modal de Editar produto -->
     <div class="modal fade" id="modaleditar" tabindex="-1" role="dialog" aria-labelledby="modaleditarlabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -198,47 +196,47 @@ $lista_produtos = $p->ListarTudo();
 
 
                     <div class="modal-body">
-                            <input type="hidden" class="form-control id" id="id" name="id"">
-                        <div class="form-group">
-                            <label for="nomeProduto">Nome</label>
-                            <input type="text" class="form-control nome" id="nomeProduto" name="nome"">
+                        <input type="hidden" class="form-control id" id="id" name="id"">
+                        <div class=" form-group">
+                        <label for="nomeProduto">Nome</label>
+                        <input type="text" class="form-control nome" id="nomeProduto" name="nome"">
                         </div>
-                        <div class="form-group">
-                            <label for="descricaoProduto">Descrição</label>
-                            <textarea class="form-control descricao" id="descricaoProduto" name="descricao" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="categoriaProduto">Categoria</label>
-                            <select class="form-control id_categoria" name="id_categoria" id="categoriaProduto">
+                        <div class=" form-group">
+                        <label for="descricaoProduto">Descrição</label>
+                        <textarea class="form-control descricao" id="descricaoProduto" name="descricao" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoriaProduto">Categoria</label>
+                        <select class="form-control id_categoria" name="id_categoria" id="categoriaProduto">
 
-                                <?php foreach ($lista_categorias as $cat) {  ?>
-                                    <option value="<?= $cat['id']; ?>"><?= $cat['nome']; ?></option>
-                                <?php  } ?>
+                            <?php foreach ($lista_categorias as $cat) {  ?>
+                                <option value="<?= $cat['id']; ?>"><?= $cat['nome']; ?></option>
+                            <?php  } ?>
 
-                            </select> <br>
-                           
-                        </div>
-                        <div class="form-group">
-                            <label for="estoqueProduto">Estoque</label>
-                            <input type="number" class="form-control estoque"  id="estoqueProduto" name="estoque" placeholder="Digite a quantidade em estoque">
-                        </div>
-                        <div class="form-group">
-                            <label for="precoProduto">Preço</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">R$</span>
-                                </div>
-                                <input type="number" class="form-control preco" id="precoProduto" name="preco" placeholder="Digite o preço">
+                        </select> <br>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="estoqueProduto">Estoque</label>
+                        <input type="number" class="form-control estoque" id="estoqueProduto" name="estoque" placeholder="Digite a quantidade em estoque">
+                    </div>
+                    <div class="form-group">
+                        <label for="precoProduto">Preço</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">R$</span>
                             </div>
+                            <input type="number" class="form-control preco" id="precoProduto" name="preco" placeholder="Digite o preço">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn btn-primary">Editar</button>
-                    </div>
-                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="submit" class="btn btn-primary">Editar</button>
+            </div>
+            </form>
         </div>
+    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
@@ -252,8 +250,8 @@ $lista_produtos = $p->ListarTudo();
             var nome = button.data('nome')
             var descricao = button.data('descricao')
             var id_categoria = button.data('id_categoria')
-            var estoque = button.data('estoque') 
-            var preco = button.data('preco') 
+            var estoque = button.data('estoque')
+            var preco = button.data('preco')
 
             var modal = $(this)
 
@@ -266,6 +264,31 @@ $lista_produtos = $p->ListarTudo();
         })
     </script>
 
+    <?php
+
+    // É ALGO OPCIONAL UTILIZAR INCLUDE ONCE
+    include_once('includes/alertas.include.php');
+    ?>
+
+    <script>
+        function excluir(id) {
+            Swal.fire({
+                title: "Tem certeza?",
+                text: "Não será possivel desfazer essa ação",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, deleta isso!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirecionar pro apagar_produto.php:
+                    window.location.href='actions/apagar_produto.php?id='+id;
+                }
+                    });
+
+        }
+    </script>
 
 </body>
 

@@ -26,28 +26,25 @@ class Categoria
         $sql = "INSERT INTO categorias(nome) VALUES (?)";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
+
+        try{
         $comando->execute([$this->nome]);
         banco::desconectar();
         return $comando->rowCount();
+        } catch(PDOException $e){
+            Banco::desconectar();
+            return 0;
+        }
     }
 
-    public function Modificar(){
-        $sql = "UPDATE categorias SET nome=? WHERE id=?";
-         $banco = Banco::conectar();
-         $comando = $banco->prepare($sql);
-         $comando->execute([$this->nome]);
-         banco::desconectar();
-         return $comando->rowCount();
-    }
-
-    public function Remover(){
-        $sql = "DELETE FROM categorias WHERE id = ?";
-        $banco = Banco::conectar();
-        $comando = $banco->prepare($sql);
-        $comando->execute([$this->id]);
-        banco::desconectar();
-        return $comando->rowCount();
-    }
+    // public function Remover(){
+    //     $sql = "DELETE FROM categorias WHERE id = ?";
+    //     $banco = Banco::conectar();
+    //     $comando = $banco->prepare($sql);
+    //     $comando->execute([$this->id]);
+    //     banco::desconectar();
+    //     return $comando->rowCount();
+    // }
 
 
 }

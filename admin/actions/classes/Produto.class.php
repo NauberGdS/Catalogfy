@@ -20,9 +20,15 @@ class Produto
         VALUES (?, ?, ?, ?, ?, ?)";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
+        
+        try{
         $comando->execute([$this->nome,$this->preco,$this->estoque,$this->id_categoria, $this->id_usuario_resp, $this->descricao]);
         Banco::desconectar();
         return $comando->rowCount();
+    } catch(PDOException $e){
+        Banco::desconectar();
+        return 0;
+    }
     }
 
     public function CadastrarComFoto(){
@@ -30,9 +36,14 @@ class Produto
         VALUES (?, ?, ?, ?, ?, ?, ?)";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
+        try{
         $comando->execute([$this->nome,$this->preco,$this->estoque,$this->id_categoria, $this->id_usuario_resp, $this->descricao, $this->foto]);
         Banco::desconectar();
         return $comando->rowCount();
+    } catch(PDOException $e){
+        Banco::desconectar();
+        return 0;
+    }
     }
 
     public function ListarTudo(){
@@ -58,9 +69,14 @@ class Produto
         WHERE id=?";
          $banco = Banco::conectar();
          $comando = $banco->prepare($sql);
+         try{
          $comando->execute([$this->nome, $this->descricao, $this->id_categoria, $this->estoque, $this->preco, $this->id]);
          banco::desconectar();
          return $comando->rowCount();
+         } catch(PDOException $e) {
+            Banco::desconectar();
+            return 0;
+         }
     }
 
     public function Apagar(){
