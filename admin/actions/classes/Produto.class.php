@@ -59,7 +59,7 @@ class Produto
         $sql = "SELECT * FROM produtos WHERE id = ?";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
-        $comando->execute($this->id);
+        $comando->execute([$this->id]);
         $arr_resultado = $comando->fetchAll(PDO::FETCH_ASSOC);
         Banco::desconectar();
         return $arr_resultado;

@@ -181,7 +181,6 @@ $lista_produtos = $p->ListarTudo();
     </div>
 
 
-
     <!-- Modal de Editar produto -->
     <div class="modal fade" id="modaleditar" tabindex="-1" role="dialog" aria-labelledby="modaleditarlabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -263,6 +262,10 @@ $lista_produtos = $p->ListarTudo();
             modal.find('.preco').val(preco)
         })
     </script>
+
+
+
+
 
     <?php
 
